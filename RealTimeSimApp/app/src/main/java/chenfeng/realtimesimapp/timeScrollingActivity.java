@@ -17,7 +17,7 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 import java.util.Random;
 
-import chenfeng.realtimesimapp.model.scheduleRMS;
+import chenfeng.realtimesimapp.model.ScheduleRMS;
 
 public class timeScrollingActivity extends AppCompatActivity {
 
@@ -65,10 +65,12 @@ public class timeScrollingActivity extends AppCompatActivity {
             //Clear ArrayList history
             clearLists();
 
+
             //
             //Create three scheduler objects: RMS, EDF, LLF
             //
-            scheduleRMS mRMSScheduler = new scheduleRMS();
+
+            ScheduleRMS mRMSScheduler = new ScheduleRMS();
             numTasks = mRMSScheduler.getNumTasks();
             startTime = mRMSScheduler.getStartList();
             endTime = mRMSScheduler.getEndList();

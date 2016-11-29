@@ -2,75 +2,46 @@ package chenfeng.realtimesimapp.model;
 
 import java.util.ArrayList;
 
+import static android.R.attr.id;
+
 /**
  * Created by chenfeng on 22/11/16.
  */
-public class scheduleRMS {
+public class ScheduleRMS {
 
     //program assigned & generated
-    private static int id;
-    private boolean isDropped;
-
     private int taskInstance, startTime, endTime;
 
-    private static int numTasks;
-    public static ArrayList<Integer> startTimeList, endTimeList, taskIdList;
+    private int numTasks;
+    public ArrayList<Integer> startTimeList, endTimeList, taskIdList;
 
-    public scheduleRMS() {
-        //Init tasks
-        startTimeList = new ArrayList<>();
-        startTimeList.add(0);
-        startTimeList.add(1);
-        startTimeList.add(3);
-        endTimeList = new ArrayList<>();
-        endTimeList.add(1);
-        endTimeList.add(2);
-        endTimeList.add(6);
-        taskIdList = new ArrayList<>();
-        taskIdList.add(0);
-        taskIdList.add(1);
-        taskIdList.add(2);
+    public ScheduleRMS() {
 
-        numTasks = 3;
 
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //Task ArrayList Functions
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    public static int getNumTasks() {
+    public int getNumTasks() {
         return numTasks;
     }
 
-    public static ArrayList<Integer> getStartList() {
+    public ArrayList<Integer> getStartList() {
         return startTimeList;
     }
 
-    public static ArrayList<Integer> getEndList() {
+    public ArrayList<Integer> getEndList() {
         return endTimeList;
     }
 
-    public static ArrayList<Integer> getIdList() {
+    public ArrayList<Integer> getIdList() {
         return taskIdList;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //Getters and Setters
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    public void setId(int id) {
-        this.id = id;
-    }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setIsDropped(boolean b) {
-        this.isDropped = b;
-    }
-
-    public boolean getIsDropped() {
-        return isDropped;
-    }
 
     public void setTaskInstance(int i) {
         this.taskInstance = i;
@@ -95,4 +66,5 @@ public class scheduleRMS {
     public int getEndTime() {
         return endTime;
     }
+
 }
