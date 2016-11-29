@@ -13,9 +13,22 @@ public class ScheduleRMS {
     private int taskInstance, startTime, endTime;
 
     private int numTasks;
-    public ArrayList<Integer> startTimeList, endTimeList, taskIdList;
+    private ArrayList<Integer> startTimeList, endTimeList, taskIdList;
 
     public ScheduleRMS() {
+        numTasks = 3;
+        startTimeList = new ArrayList<>();
+        startTimeList.add(0);
+        startTimeList.add(1);
+        startTimeList.add(3);
+        endTimeList = new ArrayList<>();
+        endTimeList.add(1);
+        endTimeList.add(2);
+        endTimeList.add(6);
+        taskIdList = new ArrayList<>();
+        taskIdList.add(0);
+        taskIdList.add(1);
+        taskIdList.add(2);
 
 
     }

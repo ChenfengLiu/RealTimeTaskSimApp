@@ -6,21 +6,19 @@ package chenfeng.realtimesimapp.model;
 public class Task {
 
     //from user input
-    private int c, p, d;
+    private int c, p;
 
     //program assigned & generated
-    private static int count;
     private int id;
     private int taskInstance, startTime, endTime;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //Constructors
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    public Task(int c, int p, int d) {
+    public Task(int c, int p, int id) {
         this.c = c;
         this.p = p;
-        this.d = d;
-        id = count++;
+        this.id = id; //id is assigned in timeScrollingActivity, stringToTaskList(String)
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,22 +40,7 @@ public class Task {
         return p;
     }
 
-    public void setD(int d) {
-        this.d = d;
-    }
-
-    public int getD() {
-        return d;
-    }
-
     public int getId(){ return id; }
 
-    public int getCount() {
-        return count;
-    }
-
-    public void clear() {
-        count = 0;
-    }
 
 }

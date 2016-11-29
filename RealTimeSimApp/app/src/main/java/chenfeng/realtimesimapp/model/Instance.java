@@ -8,31 +8,41 @@ import java.util.ArrayList;
 
 public class Instance {
 
-    private int taskID;
-    private int instanceNum;
-    private ArrayList<Integer> startTime, endTime;
+    private int id, arriveTime, c, p, instance;
 
-    public Instance(int id, int num, ArrayList<Integer> start, ArrayList<Integer> end){
-        taskID = id;
-        instanceNum = num;
-        startTime = start;
-        endTime = end;
+    public Instance(int id, int arriveTime, int c, int p, int instance) {
+        this.id = id;
+        this.arriveTime = arriveTime;
+        this.c = c;
+        this.p = p;
+        this.instance = instance;
     }
 
-    public int getTaskID(){
-        return taskID;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //Getters
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    public int getId() {
+        return id;
     }
 
-    public int getInstanceNum(){
-        return instanceNum;
+    public int getArriveTime() {
+        return arriveTime;
     }
 
-    public ArrayList<Integer> getStartTime(){
-        return startTime;
+    public void executeC() {
+        c = c - 1;
     }
 
-    public ArrayList<Integer> getEndTime(){
-        return endTime;
+    public int getC() {
+        return c;
     }
 
+    public int getP() {
+        return p;
+    }
+
+    public int getInstance() {
+        return instance;
+    }
 }
