@@ -18,7 +18,8 @@
             android:id="@+id/mlinearlayout"
             android:layout_width="1000dp"
             android:layout_height="match_parent"
-            android:background="#00FFFF">
+            android:background="#00FFFF"
+            android:orientation="horizontal">
 
         </LinearLayout>
 

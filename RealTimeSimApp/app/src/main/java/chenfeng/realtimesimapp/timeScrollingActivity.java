@@ -34,10 +34,13 @@ public class timeScrollingActivity extends AppCompatActivity {
         mLinearLayout.addView(mCustomView);
 
     }
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //Create Custom View
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     private class CustomView extends View {
 
-        private Paint mPaint;
+        private Paint mPaintRect, mPaintLine, mPaintText;
         private Rect mRectangle;
 
         private int numTasks;
@@ -46,26 +49,34 @@ public class timeScrollingActivity extends AppCompatActivity {
 
         private int SCALE_INDEX = 100;
         private int RECT_HEIGHT = 100;
-        private int Y_RMS = 100, Y_EDF = 400, Y_LLF = 700;
-        private int X_PADDING = 200;
+        private int Y_RMS = 200, Y_EDF = 550, Y_LLF = 900;
+        private int X_PADDING = 250;
 
 
         public CustomView(Context context) {
             super(context);
+            //
+            // Create three Paint object for drawing Rectangles, lines and text.
+            //
+            mPaintRect = new Paint();
+            mPaintLine = new Paint();
+            mPaintText = new Paint();
 
-            mPaint = new Paint();
-            mPaint.setColor(Color.GRAY);
-
+            //Clear ArrayList history
             clearLists();
 
+            //
+            //Create three scheduler objects: RMS, EDF, LLF
+            //
             scheduleRMS mRMSScheduler = new scheduleRMS();
             numTasks = mRMSScheduler.getNumTasks();
             startTime = mRMSScheduler.getStartList();
             endTime = mRMSScheduler.getEndList();
             taskId = mRMSScheduler.getIdList();
 
-
+            //Generate random colors for each unique task
             getRandomColor();
+            //Generate one Rectangle shape for every task instance
             generateRectList();
 
 
@@ -75,6 +86,14 @@ public class timeScrollingActivity extends AppCompatActivity {
         protected void onDraw(Canvas canvas) {
             //set background color
             canvas.drawColor(Color.LTGRAY);
+            //Draw Titles
+            float textSize = mPaintText.getTextSize();
+            mPaintText.setTextSize(textSize * 5);
+            canvas.drawText("RMS Schedule: ", 0, 14, X_PADDING - 100, Y_RMS - 100, mPaintText);
+            canvas.drawText("EDF Schedule: ", 0, 14, X_PADDING - 100, Y_EDF - 100, mPaintText);
+            canvas.drawText("LLF Schedule: ", 0, 14, X_PADDING - 100, Y_LLF - 100, mPaintText);
+            mPaintText.setTextSize(textSize);
+
             //Draw RMS schedule
             drawRMSSchedule(canvas);
             //Draw EDF schedule
@@ -82,17 +101,18 @@ public class timeScrollingActivity extends AppCompatActivity {
             //Draw LLF schedule
             drawLLFSchedule(canvas);
 
-
         }
 
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             Display d = getWindowManager().getDefaultDisplay();
             Point dSize = new Point();
-
             d.getSize(dSize);
 
-            int width = dSize.x + 1000;
+            int width = endTime.get(endTime.size() - 1) * SCALE_INDEX + + X_PADDING + 150 ;
+            if(width < (dSize.x + 100)){
+                width = dSize.x + 100;
+            }
             int height = dSize.y;
             setMeasuredDimension(width, height);
 
@@ -102,23 +122,49 @@ public class timeScrollingActivity extends AppCompatActivity {
         //draw helper function
         ////////////////////////////////////////////////////////////////////////////////////////////
         private void drawRMSSchedule(Canvas canvas) {
-
+            //Draw Rectangles
             for (int i = 0; i < taskId.size(); i++) {
-                mPaint.setColor(colors.get(taskId.get(i)));
-                canvas.drawRect(mRectangles.get(i), mPaint);
-            }
-            mPaint.setColor(Color.BLACK);
-            mPaint.setStrokeWidth(10.0f);
+                mPaintRect.setColor(colors.get(taskId.get(i)));
+                canvas.drawRect(mRectangles.get(i), mPaintRect);
 
-            float lineWidth = (float) endTime.get(endTime.size()-1) * SCALE_INDEX;
-            canvas.drawLine(150.0f, (float) Y_RMS, (250.0f + lineWidth) , (float) Y_RMS, mPaint);
+                //Draw time text
+                float textSize = mPaintText.getTextSize();
+                mPaintText.setTextSize(textSize * 3);
+                canvas.drawText((startTime.get(i) + ""), 0, (startTime.get(i) + "").length(), mRectangles.get(i).left, Y_RMS + RECT_HEIGHT + 50, mPaintText);
+                mPaintText.setTextSize(textSize);
+            }
+
+            //Draw last time text
+            float textSize = mPaintText.getTextSize();
+            mPaintText.setTextSize(textSize * 3);
+            canvas.drawText((endTime.get(endTime.size()-1) + ""), 0, (endTime.get(endTime.size()-1) + "").length(), mRectangles.get(mRectangles.size()-1).right
+                    , Y_RMS + RECT_HEIGHT + 50, mPaintText);
+            mPaintText.setTextSize(textSize);
+
+
+            //Draw Lines
+            mPaintLine.setStrokeWidth(10.0f);
+            float lineWidth = (float) endTime.get(endTime.size() - 1) * SCALE_INDEX;
+            canvas.drawLine((X_PADDING - 50), (float) (Y_RMS + RECT_HEIGHT), (X_PADDING + lineWidth + 50), (float) (Y_RMS + RECT_HEIGHT), mPaintLine);
         }
 
         private void drawEDFSchedule(Canvas canvas) {
+            //Draw Rectangles
+
+            //Draw Lines
+            mPaintLine.setStrokeWidth(10.0f);
+            float lineWidth = (float) endTime.get(endTime.size() - 1) * SCALE_INDEX;
+            canvas.drawLine((X_PADDING - 50), (float) (Y_EDF + RECT_HEIGHT), (X_PADDING + lineWidth + 50), (float) (Y_EDF + RECT_HEIGHT), mPaintLine);
 
         }
 
         private void drawLLFSchedule(Canvas canvas) {
+            //Draw Rectangles
+
+            //Draw Lines
+            mPaintLine.setStrokeWidth(10.0f);
+            float lineWidth = (float) endTime.get(endTime.size() - 1) * SCALE_INDEX;
+            canvas.drawLine((X_PADDING - 50), (float) (Y_LLF + RECT_HEIGHT), (X_PADDING + lineWidth + 50), (float) (Y_LLF + RECT_HEIGHT), mPaintLine);
 
         }
 
@@ -135,7 +181,6 @@ public class timeScrollingActivity extends AppCompatActivity {
 
         private void getRandomColor() {
             Random ran = new Random();
-
             for (int i = 0; i < numTasks; i++) {
                 int randColor = Color.argb(255, ran.nextInt(256), ran.nextInt(256), ran.nextInt(256));
                 colors.add(randColor);
@@ -150,6 +195,7 @@ public class timeScrollingActivity extends AppCompatActivity {
                 mRectangle = new Rect((x + X_PADDING), Y_RMS, (width + x + X_PADDING), (RECT_HEIGHT + Y_RMS));
                 mRectangles.add(mRectangle);
             }
+
 
         }
     }
