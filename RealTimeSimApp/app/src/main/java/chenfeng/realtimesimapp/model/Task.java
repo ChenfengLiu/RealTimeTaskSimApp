@@ -9,8 +9,8 @@ public class Task {
     private int c, p, d;
 
     //program assigned & generated
-    private static int id;
-    private boolean isDropped;
+    private static int count;
+    private int id;
     private int taskInstance, startTime, endTime;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -20,7 +20,7 @@ public class Task {
         this.c = c;
         this.p = p;
         this.d = d;
-        this.isDropped = false;
+        id = count++;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,6 +50,14 @@ public class Task {
         return d;
     }
 
+    public int getId(){ return id; }
 
+    public int getCount() {
+        return count;
+    }
+
+    public void clear() {
+        count = 0;
+    }
 
 }
