@@ -165,18 +165,17 @@ public class ScheduleRMS {
         for (int i = 0; i < tasks.size(); i++){
             time[0] += tasks.get(i).getC();
         }
-        int i = 1;
-        while (true){
+        for (int i = 1; i < tasks.size(); i++){
             for (int j = 0; j < tasks.size(); j++){
-                time[i] += tasks.get(j).getC() * (int) Math.ceil(time[i - 1] / tasks.get(j).getP());
+                time[i] += tasks.get(j).getC() * (int) Math.ceil((double) time[i - 1] / tasks.get(j).getP());
             }
             if (time[i] > tasks.get(tasks.size() - 1).getP()){
                 return false;
             } else if (time[i] == time[i - 1]){
                 return true;
             }
-            i++;
         }
+        return false;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
