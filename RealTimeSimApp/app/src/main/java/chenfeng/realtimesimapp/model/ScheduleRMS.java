@@ -153,7 +153,8 @@ public class ScheduleRMS {
             Task curr = tasks.get(i);
             for(int j = i - 1; j >= 0; j--){
                 if(curr.getP() > tasks.get(j).getP() && j != i - 1){
-                    Collections.swap(tasks, i, j - 1);
+                    Collections.swap(tasks, i, j + 1);
+                    break;
                 }
             }
         }

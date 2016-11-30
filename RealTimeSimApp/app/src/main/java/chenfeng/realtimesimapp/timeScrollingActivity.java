@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import chenfeng.realtimesimapp.model.ScheduleEDF;
+import chenfeng.realtimesimapp.model.ScheduleLLF;
 import chenfeng.realtimesimapp.model.ScheduleRMS;
 import chenfeng.realtimesimapp.model.Task;
 
@@ -82,6 +83,11 @@ public class timeScrollingActivity extends AppCompatActivity {
         private ArrayList<Rect> EDF_Rects;
         private int EDF_lineLength;
 
+        //For LLF
+        private int[] LLF_Id, LLF_StartTime, LLF_EndTime, LLF_Instance;
+        private ArrayList<Rect> LLF_Rects;
+        private int LLF_lineLength;
+
         //For Canvas
         private int SCALE_INDEX = 100;
         private int RECT_HEIGHT = 100;
@@ -98,6 +104,8 @@ public class timeScrollingActivity extends AppCompatActivity {
             mPaintLine = new Paint();
             mPaintText = new Paint();
 
+            colors = new ArrayList<>();
+
             //Clear ArrayList history
             clearLists();
 
@@ -107,8 +115,9 @@ public class timeScrollingActivity extends AppCompatActivity {
             //Calculate schedules: RMS, EDF, LLF
             //TODO
 
+
             ScheduleRMS mRMSScheduler = new ScheduleRMS(tList);
-            if(mRMSScheduler.getIdArr() != null){
+            if (mRMSScheduler.getIdArr() != null) {
                 RMS_Id = mRMSScheduler.getIdArr();
                 RMS_StartTime = mRMSScheduler.getStartTimeArr();
                 RMS_EndTime = mRMSScheduler.getEndTimeArr();
@@ -119,7 +128,7 @@ public class timeScrollingActivity extends AppCompatActivity {
 
 
             ScheduleEDF mEDFScheduler = new ScheduleEDF(tList);
-            if(mEDFScheduler.getIdArr() != null){
+            if (mEDFScheduler.getIdArr() != null) {
                 EDF_Id = mEDFScheduler.getIdArr();
                 EDF_StartTime = mEDFScheduler.getStartTimeArr();
                 EDF_EndTime = mEDFScheduler.getEndTimeArr();
@@ -128,12 +137,22 @@ public class timeScrollingActivity extends AppCompatActivity {
                 EDF_lineLength = EDF_Id.length;
             }
 
+            ScheduleLLF mLLFScheduler = new ScheduleLLF(tList);
+            if (mLLFScheduler.getIdArr() != null) {
+                LLF_Id = mLLFScheduler.getIdArr();
+                LLF_StartTime = mLLFScheduler.getStartTimeArr();
+                LLF_EndTime = mLLFScheduler.getEndTimeArr();
+                LLF_Instance = mEDFScheduler.getInstanceArr();
+                LLF_Rects = new ArrayList<>();
+                LLF_lineLength = LLF_Id.length;
+            }
 
             //Generate random colors for each unique task
             getRandomColor();
             //Generate one Rectangle shape for every task instance
             RMS_GenerateRectList();
             EDF_GenerateRectList();
+            LLF_GenerateRectList();
 
 
         }
@@ -165,11 +184,24 @@ public class timeScrollingActivity extends AppCompatActivity {
             Point dSize = new Point();
             d.getSize(dSize);
 
-            int width = EDF_lineLength * SCALE_INDEX + X_PADDING + 150;
-
-            if (width < (dSize.x + 100)) {
-                width = dSize.x + 100;
+            int width = dSize.x;
+            System.out.println("1: The Width is: " + width + "!!!!!!!!!!!!!!!!!!!!!");
+            if (width < RMS_lineLength) {
+                width = RMS_lineLength * SCALE_INDEX + X_PADDING + 150;
+                System.out.println("2: The Width is: " + width + "!!!!!!!!!!!!!!!!!!!!!");
             }
+
+            if (width < EDF_lineLength) {
+                width = EDF_lineLength * SCALE_INDEX + X_PADDING + 150;
+                System.out.println("3: The Width is: " + width + "!!!!!!!!!!!!!!!!!!!!!");
+            }
+
+            if (width < LLF_lineLength) {
+                width = LLF_lineLength * SCALE_INDEX + X_PADDING + 150;
+                System.out.println("4: The Width is: " + width + "!!!!!!!!!!!!!!!!!!!!!");
+            }
+            System.out.println("The Width is: " + width + "!!!!!!!!!!!!!!!!!!!!!");
+
             int height = dSize.y;
             setMeasuredDimension(width, height);
 
@@ -220,7 +252,6 @@ public class timeScrollingActivity extends AppCompatActivity {
             }
 
 
-
         }
 
         private void drawEDFSchedule(Canvas canvas) {
@@ -266,14 +297,51 @@ public class timeScrollingActivity extends AppCompatActivity {
         }
 
         private void drawLLFSchedule(Canvas canvas) {
+            if (LLF_Id != null) {
+                //Draw Rectangles
+                for (int i = 0; i < LLF_Id.length; i++) {
+                    if (LLF_Id[i] == -1) continue;
+                    mPaintRect.setColor(colors.get(LLF_Id[i]));
+                    canvas.drawRect(LLF_Rects.get(i), mPaintRect);
 
+                    //Draw "time" text
+                    float textSize = mPaintText.getTextSize();
+                    mPaintText.setTextSize(textSize * 3);
+                    canvas.drawText((LLF_StartTime[i] + ""), 0, (LLF_StartTime[i] + "").length(), LLF_Rects.get(i).left, Y_LLF + RECT_HEIGHT + 50, mPaintText);
+                    mPaintText.setTextSize(textSize);
+                }
+                //Draw last "time" text
+                for (int j = LLF_Id.length - 1; j > 0; j--) {
+                    if (LLF_Id[j] != -1) {
+                        float textSize = mPaintText.getTextSize();
+                        mPaintText.setTextSize(textSize * 3);
+                        canvas.drawText((LLF_EndTime[j] + ""), 0, (LLF_EndTime[j] + "").length(), LLF_Rects.get(j).right, Y_LLF + RECT_HEIGHT + 50, mPaintText);
+                        mPaintText.setTextSize(textSize);
+                    }
+                }
+
+                //Draw Base Line
+                mPaintLine.setStrokeWidth(10.0f);
+                float lineWidth = (float) LLF_lineLength * SCALE_INDEX;
+                canvas.drawLine((X_PADDING - 50), (float) (Y_LLF + RECT_HEIGHT), (X_PADDING + lineWidth + 50), (float) (Y_LLF + RECT_HEIGHT), mPaintLine);
+
+            } else {
+                //Draw text: "EDF NOT schedulable"
+                float textSize = mPaintText.getTextSize();
+                mPaintText.setTextSize(textSize * 3);
+                canvas.drawText("LLF NOT Schedulable", 0, 19, 400, Y_LLF + 50, mPaintText);
+                mPaintText.setTextSize(textSize);
+                //Draw Default Base Line
+                mPaintLine.setStrokeWidth(10.0f);
+                canvas.drawLine((X_PADDING - 50), (float) (Y_LLF + RECT_HEIGHT), 1000, (float) (Y_LLF + RECT_HEIGHT), mPaintLine);
+            }
 
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////
         //List helper function
         ////////////////////////////////////////////////////////////////////////////////////////////
-        private void clearLists(){
+        private void clearLists() {
 
         }
 
@@ -301,6 +369,7 @@ public class timeScrollingActivity extends AppCompatActivity {
                 }//End for loop
             }//End if
         }
+
         private void EDF_GenerateRectList() {
             if (EDF_Id != null) {
                 for (int i = 0; i < EDF_Id.length; i++) {
@@ -312,6 +381,23 @@ public class timeScrollingActivity extends AppCompatActivity {
                     } else {
                         mRectangle = new Rect(0, 0, 0, 0);
                         EDF_Rects.add(mRectangle);
+                    }
+
+                }//End for loop
+            }//End if
+        }
+
+        private void LLF_GenerateRectList() {
+            if (LLF_Id != null) {
+                for (int i = 0; i < LLF_Id.length; i++) {
+                    if (LLF_Id[i] != -1) {
+                        int x = LLF_StartTime[i] * SCALE_INDEX;
+                        int width = (LLF_EndTime[i] - LLF_StartTime[i]) * SCALE_INDEX;
+                        mRectangle = new Rect((x + X_PADDING), Y_LLF, (width + x + X_PADDING), (RECT_HEIGHT + Y_LLF));
+                        LLF_Rects.add(mRectangle);
+                    } else {
+                        mRectangle = new Rect(0, 0, 0, 0);
+                        LLF_Rects.add(mRectangle);
                     }
 
                 }//End for loop
