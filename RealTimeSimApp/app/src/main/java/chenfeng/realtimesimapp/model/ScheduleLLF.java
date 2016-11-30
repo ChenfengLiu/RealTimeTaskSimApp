@@ -42,6 +42,7 @@ public class ScheduleLLF {
         } else {
             idArr = null;
         }
+        System.out.println("LLF DONE!!!!!!!!");
     }
 
     private void simulate(ArrayList<Instance> instances, int sTime) {
@@ -70,7 +71,6 @@ public class ScheduleLLF {
             int numInstance = simTime / t.getP();
             for (int i = 0; i < numInstance; i++) {
                 Instance mInstance = new Instance(t.getId(), i * t.getP(), t.getC(), (i + 1) * t.getP(), i);
-                System.out.println("Task ID: " + mInstance.getId() + "; Task Instance: " + mInstance.getInstance() + "!!!!!!!!!!!!!!!");
                 tListProcessed.add(mInstance);
             }
         }

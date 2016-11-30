@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -126,7 +127,6 @@ public class timeScrollingActivity extends AppCompatActivity {
                 RMS_lineLength = RMS_Id.length;
             }
 
-
             ScheduleEDF mEDFScheduler = new ScheduleEDF(tList);
             if (mEDFScheduler.getIdArr() != null) {
                 EDF_Id = mEDFScheduler.getIdArr();
@@ -136,6 +136,7 @@ public class timeScrollingActivity extends AppCompatActivity {
                 EDF_Rects = new ArrayList<>();
                 EDF_lineLength = EDF_Id.length;
             }
+
 
             ScheduleLLF mLLFScheduler = new ScheduleLLF(tList);
             if (mLLFScheduler.getIdArr() != null) {
@@ -147,6 +148,7 @@ public class timeScrollingActivity extends AppCompatActivity {
                 LLF_lineLength = LLF_Id.length;
             }
 
+            requestLayout();
             //Generate random colors for each unique task
             getRandomColor();
             //Generate one Rectangle shape for every task instance
