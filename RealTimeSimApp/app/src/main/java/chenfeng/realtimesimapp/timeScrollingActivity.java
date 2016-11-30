@@ -30,6 +30,21 @@ public class timeScrollingActivity extends AppCompatActivity {
     private ArrayList<Task> tList;
     private int numTasks;
 
+    //For RMS
+    private int[] RMS_Id, RMS_StartTime, RMS_EndTime, RMS_Instance;
+    private ArrayList<Rect> RMS_Rects;
+    private int RMS_lineLength;
+
+    //For EDF
+    private int[] EDF_Id, EDF_StartTime, EDF_EndTime, EDF_Instance;
+    private ArrayList<Rect> EDF_Rects;
+    private int EDF_lineLength;
+
+    //For LLF
+    private int[] LLF_Id, LLF_StartTime, LLF_EndTime, LLF_Instance;
+    private ArrayList<Rect> LLF_Rects;
+    private int LLF_lineLength;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +56,41 @@ public class timeScrollingActivity extends AppCompatActivity {
         tList = new ArrayList<>();
         tList = stringToTaskList(tasks);
         numTasks = tList.size();
+
+        //Create three scheduler objects: RMS, EDF, LLF
+        //Calculate schedules: RMS, EDF, LLF
+
+        ScheduleRMS mRMSScheduler = new ScheduleRMS(tList);
+        if (mRMSScheduler.getIdArr() != null) {
+            RMS_Id = mRMSScheduler.getIdArr();
+            RMS_StartTime = mRMSScheduler.getStartTimeArr();
+            RMS_EndTime = mRMSScheduler.getEndTimeArr();
+            RMS_Instance = mRMSScheduler.getInstanceArr();
+            RMS_Rects = new ArrayList<>();
+            RMS_lineLength = RMS_Id.length;
+        }
+
+        ScheduleEDF mEDFScheduler = new ScheduleEDF(tList);
+        if (mEDFScheduler.getIdArr() != null) {
+            EDF_Id = mEDFScheduler.getIdArr();
+            EDF_StartTime = mEDFScheduler.getStartTimeArr();
+            EDF_EndTime = mEDFScheduler.getEndTimeArr();
+            EDF_Instance = mEDFScheduler.getInstanceArr();
+            EDF_Rects = new ArrayList<>();
+            EDF_lineLength = EDF_Id.length;
+        }
+
+
+        ScheduleLLF mLLFScheduler = new ScheduleLLF(tList);
+        if (mLLFScheduler.getIdArr() != null) {
+            LLF_Id = mLLFScheduler.getIdArr();
+            LLF_StartTime = mLLFScheduler.getStartTimeArr();
+            LLF_EndTime = mLLFScheduler.getEndTimeArr();
+            LLF_Instance = mEDFScheduler.getInstanceArr();
+            LLF_Rects = new ArrayList<>();
+            LLF_lineLength = LLF_Id.length;
+        }
+
 
         //draw custom view to layout
         LinearLayout mLinearLayout = (LinearLayout) findViewById(R.id.mlinearlayout);
@@ -74,20 +124,7 @@ public class timeScrollingActivity extends AppCompatActivity {
         //For rectangle colors
         private ArrayList<Integer> colors;
 
-        //For RMS
-        private int[] RMS_Id, RMS_StartTime, RMS_EndTime, RMS_Instance;
-        private ArrayList<Rect> RMS_Rects;
-        private int RMS_lineLength;
 
-        //For EDF
-        private int[] EDF_Id, EDF_StartTime, EDF_EndTime, EDF_Instance;
-        private ArrayList<Rect> EDF_Rects;
-        private int EDF_lineLength;
-
-        //For LLF
-        private int[] LLF_Id, LLF_StartTime, LLF_EndTime, LLF_Instance;
-        private ArrayList<Rect> LLF_Rects;
-        private int LLF_lineLength;
 
         //For Canvas
         private int SCALE_INDEX = 100;
@@ -110,45 +147,6 @@ public class timeScrollingActivity extends AppCompatActivity {
             //Clear ArrayList history
             clearLists();
 
-
-            //
-            //Create three scheduler objects: RMS, EDF, LLF
-            //Calculate schedules: RMS, EDF, LLF
-            //TODO
-
-
-            ScheduleRMS mRMSScheduler = new ScheduleRMS(tList);
-            if (mRMSScheduler.getIdArr() != null) {
-                RMS_Id = mRMSScheduler.getIdArr();
-                RMS_StartTime = mRMSScheduler.getStartTimeArr();
-                RMS_EndTime = mRMSScheduler.getEndTimeArr();
-                RMS_Instance = mRMSScheduler.getInstanceArr();
-                RMS_Rects = new ArrayList<>();
-                RMS_lineLength = RMS_Id.length;
-            }
-
-            ScheduleEDF mEDFScheduler = new ScheduleEDF(tList);
-            if (mEDFScheduler.getIdArr() != null) {
-                EDF_Id = mEDFScheduler.getIdArr();
-                EDF_StartTime = mEDFScheduler.getStartTimeArr();
-                EDF_EndTime = mEDFScheduler.getEndTimeArr();
-                EDF_Instance = mEDFScheduler.getInstanceArr();
-                EDF_Rects = new ArrayList<>();
-                EDF_lineLength = EDF_Id.length;
-            }
-
-
-            ScheduleLLF mLLFScheduler = new ScheduleLLF(tList);
-            if (mLLFScheduler.getIdArr() != null) {
-                LLF_Id = mLLFScheduler.getIdArr();
-                LLF_StartTime = mLLFScheduler.getStartTimeArr();
-                LLF_EndTime = mLLFScheduler.getEndTimeArr();
-                LLF_Instance = mEDFScheduler.getInstanceArr();
-                LLF_Rects = new ArrayList<>();
-                LLF_lineLength = LLF_Id.length;
-            }
-
-            requestLayout();
             //Generate random colors for each unique task
             getRandomColor();
             //Generate one Rectangle shape for every task instance
@@ -156,7 +154,7 @@ public class timeScrollingActivity extends AppCompatActivity {
             EDF_GenerateRectList();
             LLF_GenerateRectList();
 
-
+            requestLayout();
         }
 
         @Override
@@ -188,18 +186,23 @@ public class timeScrollingActivity extends AppCompatActivity {
 
             int width = dSize.x;
             System.out.println("1: The Width is: " + width + "!!!!!!!!!!!!!!!!!!!!!");
-            if (width < RMS_lineLength) {
+            System.out.println("RMS LINE LENGTH IS: " + RMS_lineLength + "!!!!!!!!!");
+            if (width < RMS_lineLength * SCALE_INDEX + X_PADDING + 150) {
                 width = RMS_lineLength * SCALE_INDEX + X_PADDING + 150;
                 System.out.println("2: The Width is: " + width + "!!!!!!!!!!!!!!!!!!!!!");
             }
 
-            if (width < EDF_lineLength) {
+            System.out.println("EDF LINE LENGTH IS: " + EDF_lineLength + "!!!!!!!!!");
+            if (width < EDF_lineLength * SCALE_INDEX + X_PADDING + 150) {
                 width = EDF_lineLength * SCALE_INDEX + X_PADDING + 150;
+
                 System.out.println("3: The Width is: " + width + "!!!!!!!!!!!!!!!!!!!!!");
             }
 
-            if (width < LLF_lineLength) {
+            System.out.println("LLF LINE LENGTH IS: " + LLF_lineLength + "!!!!!!!!!");
+            if (width < LLF_lineLength * SCALE_INDEX + X_PADDING + 150) {
                 width = LLF_lineLength * SCALE_INDEX + X_PADDING + 150;
+
                 System.out.println("4: The Width is: " + width + "!!!!!!!!!!!!!!!!!!!!!");
             }
             System.out.println("The Width is: " + width + "!!!!!!!!!!!!!!!!!!!!!");

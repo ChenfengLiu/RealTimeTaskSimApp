@@ -21,13 +21,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //Test user input: only a test
-        t = new Task(1, 8, 0);
+        t = new Task(3, 12, 0);
         tList = new ArrayList<>();
         tList.add(t);
-        t = new Task(2, 6, 1);
+        t = new Task(3, 12, 1);
         tList.add(t);
-        t=  new Task(4, 24, 2);
+        t=  new Task(8, 16, 2);
         tList.add(t);
+
+        //Set 2:
+//        t = new Task(1, 8, 0);
+//        tList = new ArrayList<>();
+//        tList.add(t);
+//        t = new Task(2, 6, 1);
+//        tList.add(t);
+//        t=  new Task(4, 24, 2);
+//        tList.add(t);
 
         final String answer = taskToString(tList);
 

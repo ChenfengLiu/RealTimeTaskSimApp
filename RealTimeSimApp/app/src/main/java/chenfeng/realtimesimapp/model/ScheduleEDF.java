@@ -11,6 +11,7 @@ public class ScheduleEDF {
     private int simTime;
 
     private ArrayList<Instance> tListProcessed;
+    private int currentInstance = -1;
 
     private int[] idArr, startTimeArr, endTimeArr, instanceArr;
 
@@ -93,14 +94,26 @@ public class ScheduleEDF {
         int min = Integer.MAX_VALUE;
         for (int i : index) {
             if (tListProcessed.get(i).getP() < min) {
-                min = tListProcessed.get(i).getP() - currentTime;
+                min = tListProcessed.get(i).getP();
                 target = i;
             }
         }
+        System.out.println("CurrentInstance is: " + currentInstance + "!!!!!!!!!!!!!!!!!");
+        if (currentInstance == -1) {
+            currentInstance = target;
+        } else if (target == -1) {
+            return target;
+        } else if (tListProcessed.get(currentInstance).getP() == tListProcessed.get(target).getP()
+                && tListProcessed.get(currentInstance).getC() > 0) {
+            target = currentInstance;
+        }
+
+
         return target;
     }
 
     private void runInstance(int currentTime, int index) {
+        currentInstance = index;
         if (index == -1) {
             idArr[currentTime] = -1;
             startTimeArr[currentTime] = -1;
