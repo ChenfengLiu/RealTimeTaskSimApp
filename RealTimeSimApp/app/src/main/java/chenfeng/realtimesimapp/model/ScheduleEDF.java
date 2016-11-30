@@ -70,7 +70,7 @@ public class ScheduleEDF {
         for (Task t : tasks) {
             int numInstance = simTime / t.getP();
             for (int i = 0; i < numInstance; i++) {
-                Instance mInstance = new Instance(t.getId(), i * t.getP(), t.getC(), t.getP(), i);
+                Instance mInstance = new Instance(t.getId(), i * t.getP(), t.getC(), (i + 1) * t.getP(), i);
                 System.out.println("Task ID: " + mInstance.getId() + "; Task Instance: " + mInstance.getInstance() + "!!!!!!!!!!!!!!!");
                 tListProcessed.add(mInstance);
             }
@@ -92,7 +92,7 @@ public class ScheduleEDF {
         int target = -1;
         int min = Integer.MAX_VALUE;
         for (int i : index) {
-            if ((tListProcessed.get(i).getP() - currentTime) < min) {
+            if (tListProcessed.get(i).getP() < min) {
                 min = tListProcessed.get(i).getP() - currentTime;
                 target = i;
             }

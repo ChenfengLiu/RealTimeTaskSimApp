@@ -71,8 +71,10 @@ public class timeScrollingActivity extends AppCompatActivity {
 
 
         //For RMS
-        private ArrayList<Integer> startTime, endTime, taskId, colors;
-        private ArrayList<Rect> mRectangles;
+        private int[] RMS_Id, RMS_StartTime, RMS_EndTime, RMS_Instance;
+//        private ArrayList<Integer> startTime, endTime, taskId, colors;
+        private ArrayList<Rect> RMS_Rects;
+        private int RMS_lineLength;
 
         //For EDF
         private int[] EDF_Id, EDF_StartTime, EDF_EndTime, EDF_Instance;
