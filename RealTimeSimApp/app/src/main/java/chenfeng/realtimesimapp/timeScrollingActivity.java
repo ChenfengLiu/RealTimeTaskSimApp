@@ -69,10 +69,11 @@ public class timeScrollingActivity extends AppCompatActivity {
         private Paint mPaintRect, mPaintLine, mPaintText;
         private Rect mRectangle;
 
+        //For rectangle colors
+        private ArrayList<Integer> colors;
 
         //For RMS
         private int[] RMS_Id, RMS_StartTime, RMS_EndTime, RMS_Instance;
-//        private ArrayList<Integer> startTime, endTime, taskId, colors;
         private ArrayList<Rect> RMS_Rects;
         private int RMS_lineLength;
 
@@ -106,11 +107,13 @@ public class timeScrollingActivity extends AppCompatActivity {
             //Calculate schedules: RMS, EDF, LLF
             //TODO
 
-            ScheduleRMS mRMSScheduler = new ScheduleRMS();
-            numTasks = mRMSScheduler.getNumTasks();
-            startTime = mRMSScheduler.getStartList();
-            endTime = mRMSScheduler.getEndList();
-            taskId = mRMSScheduler.getIdList();
+            ScheduleRMS mRMSScheduler = new ScheduleRMS(tList);
+            RMS_Id = mRMSScheduler.getIdArr();
+            RMS_StartTime = mRMSScheduler.getStartTimeArr();
+            RMS_EndTime = mRMSScheduler.getEndTimeArr();
+            RMS_Instance = mRMSScheduler.getInstanceArr();
+            RMS_Rects = new ArrayList<>();
+            RMS_lineLength = RMS_Id.length;
 
             ScheduleEDF mEDFScheduler = new ScheduleEDF(tList);
             EDF_Id = mEDFScheduler.getIdArr();
@@ -123,7 +126,7 @@ public class timeScrollingActivity extends AppCompatActivity {
             //Generate random colors for each unique task
             getRandomColor();
             //Generate one Rectangle shape for every task instance
-            generateRectList();
+            RMS_GenerateRectList();
             EDF_GenerateRectList();
 
 
@@ -170,30 +173,39 @@ public class timeScrollingActivity extends AppCompatActivity {
         //draw helper function
         ////////////////////////////////////////////////////////////////////////////////////////////
         private void drawRMSSchedule(Canvas canvas) {
-            //Draw Rectangles
-            for (int i = 0; i < taskId.size(); i++) {
-                mPaintRect.setColor(colors.get(taskId.get(i)));
-                canvas.drawRect(mRectangles.get(i), mPaintRect);
+            if (RMS_Id != null) {
+                //Draw Rectangles
+                for (int i = 0; i < RMS_Id.length; i++) {
+                    if (RMS_Id[i] == -1) continue;
+                    mPaintRect.setColor(colors.get(RMS_Id[i]));
+                    canvas.drawRect(RMS_Rects.get(i), mPaintRect);
 
-                //Draw "time" text
-                float textSize = mPaintText.getTextSize();
-                mPaintText.setTextSize(textSize * 3);
-                canvas.drawText((startTime.get(i) + ""), 0, (startTime.get(i) + "").length(), mRectangles.get(i).left, Y_RMS + RECT_HEIGHT + 50, mPaintText);
-                mPaintText.setTextSize(textSize);
+                    //Draw "time" text
+                    float textSize = mPaintText.getTextSize();
+                    mPaintText.setTextSize(textSize * 3);
+                    canvas.drawText((RMS_StartTime[i] + ""), 0, (RMS_StartTime[i] + "").length(), RMS_Rects.get(i).left, Y_RMS + RECT_HEIGHT + 50, mPaintText);
+                    mPaintText.setTextSize(textSize);
+                }
+                //Draw last "time" text
+                for (int j = RMS_Id.length - 1; j > 0; j--) {
+                    if (RMS_Id[j] != -1) {
+                        float textSize = mPaintText.getTextSize();
+                        mPaintText.setTextSize(textSize * 3);
+                        canvas.drawText((RMS_EndTime[j] + ""), 0, (RMS_EndTime[j] + "").length(), RMS_Rects.get(j).right, Y_RMS + RECT_HEIGHT + 50, mPaintText);
+                        mPaintText.setTextSize(textSize);
+                    }
+                }
+
+
+            } else {
+                //Draw text: "RMS NOT schedulable"
             }
 
-            //Draw last "time" text
-            float textSize = mPaintText.getTextSize();
-            mPaintText.setTextSize(textSize * 3);
-            canvas.drawText((endTime.get(endTime.size() - 1) + ""), 0, (endTime.get(endTime.size() - 1) + "").length(), mRectangles.get(mRectangles.size() - 1).right
-                    , Y_RMS + RECT_HEIGHT + 50, mPaintText);
-            mPaintText.setTextSize(textSize);
-
-
-            //Draw Lines
+            //Draw Base Line
             mPaintLine.setStrokeWidth(10.0f);
-            float lineWidth = (float) endTime.get(endTime.size() - 1) * SCALE_INDEX;
+            float lineWidth = (float) RMS_lineLength * SCALE_INDEX;
             canvas.drawLine((X_PADDING - 50), (float) (Y_RMS + RECT_HEIGHT), (X_PADDING + lineWidth + 50), (float) (Y_RMS + RECT_HEIGHT), mPaintLine);
+
         }
 
         private void drawEDFSchedule(Canvas canvas) {
@@ -233,24 +245,15 @@ public class timeScrollingActivity extends AppCompatActivity {
         }
 
         private void drawLLFSchedule(Canvas canvas) {
-            //Draw Rectangles
 
-            //Draw Lines
-            mPaintLine.setStrokeWidth(10.0f);
-            float lineWidth = (float) endTime.get(endTime.size() - 1) * SCALE_INDEX;
-            canvas.drawLine((X_PADDING - 50), (float) (Y_LLF + RECT_HEIGHT), (X_PADDING + lineWidth + 50), (float) (Y_LLF + RECT_HEIGHT), mPaintLine);
 
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////
         //List helper function
         ////////////////////////////////////////////////////////////////////////////////////////////
-        private void clearLists() {
-            startTime = new ArrayList<Integer>();
-            endTime = new ArrayList<Integer>();
-            taskId = new ArrayList<Integer>();
-            colors = new ArrayList<Integer>();
-            mRectangles = new ArrayList<Rect>();
+        private void clearLists(){
+
         }
 
         private void getRandomColor() {
@@ -261,17 +264,22 @@ public class timeScrollingActivity extends AppCompatActivity {
             }
         }
 
-        private void generateRectList() {
+        private void RMS_GenerateRectList() {
+            if (RMS_Id != null) {
+                for (int i = 0; i < RMS_Id.length; i++) {
+                    if (RMS_Id[i] != -1) {
+                        int x = RMS_StartTime[i] * SCALE_INDEX;
+                        int width = (RMS_EndTime[i] - RMS_StartTime[i]) * SCALE_INDEX;
+                        mRectangle = new Rect((x + X_PADDING), Y_RMS, (width + x + X_PADDING), (RECT_HEIGHT + Y_RMS));
+                        RMS_Rects.add(mRectangle);
+                    } else {
+                        mRectangle = new Rect(0, 0, 0, 0);
+                        RMS_Rects.add(mRectangle);
+                    }
 
-            for (int i = 0; i < startTime.size(); i++) {
-                int x = startTime.get(i) * SCALE_INDEX;
-                int width = (endTime.get(i) - startTime.get(i)) * SCALE_INDEX;
-                mRectangle = new Rect((x + X_PADDING), Y_RMS, (width + x + X_PADDING), (RECT_HEIGHT + Y_RMS));
-                mRectangles.add(mRectangle);
-            }
-
+                }//End for loop
+            }//End if
         }
-
         private void EDF_GenerateRectList() {
             if (EDF_Id != null) {
                 for (int i = 0; i < EDF_Id.length; i++) {
@@ -285,11 +293,8 @@ public class timeScrollingActivity extends AppCompatActivity {
                         EDF_Rects.add(mRectangle);
                     }
 
-
-                }
-            }
-
-
+                }//End for loop
+            }//End if
         }
     }
 }
