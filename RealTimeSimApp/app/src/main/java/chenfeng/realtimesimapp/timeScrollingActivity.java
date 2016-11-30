@@ -108,20 +108,26 @@ public class timeScrollingActivity extends AppCompatActivity {
             //TODO
 
             ScheduleRMS mRMSScheduler = new ScheduleRMS(tList);
-            RMS_Id = mRMSScheduler.getIdArr();
-            RMS_StartTime = mRMSScheduler.getStartTimeArr();
-            RMS_EndTime = mRMSScheduler.getEndTimeArr();
-            RMS_Instance = mRMSScheduler.getInstanceArr();
-            RMS_Rects = new ArrayList<>();
-            RMS_lineLength = RMS_Id.length;
+            if(mRMSScheduler.getIdArr() != null){
+                RMS_Id = mRMSScheduler.getIdArr();
+                RMS_StartTime = mRMSScheduler.getStartTimeArr();
+                RMS_EndTime = mRMSScheduler.getEndTimeArr();
+                RMS_Instance = mRMSScheduler.getInstanceArr();
+                RMS_Rects = new ArrayList<>();
+                RMS_lineLength = RMS_Id.length;
+            }
+
 
             ScheduleEDF mEDFScheduler = new ScheduleEDF(tList);
-            EDF_Id = mEDFScheduler.getIdArr();
-            EDF_StartTime = mEDFScheduler.getStartTimeArr();
-            EDF_EndTime = mEDFScheduler.getEndTimeArr();
-            EDF_Instance = mEDFScheduler.getInstanceArr();
-            EDF_Rects = new ArrayList<>();
-            EDF_lineLength = EDF_Id.length;
+            if(mEDFScheduler.getIdArr() != null){
+                EDF_Id = mEDFScheduler.getIdArr();
+                EDF_StartTime = mEDFScheduler.getStartTimeArr();
+                EDF_EndTime = mEDFScheduler.getEndTimeArr();
+                EDF_Instance = mEDFScheduler.getInstanceArr();
+                EDF_Rects = new ArrayList<>();
+                EDF_lineLength = EDF_Id.length;
+            }
+
 
             //Generate random colors for each unique task
             getRandomColor();
@@ -196,15 +202,24 @@ public class timeScrollingActivity extends AppCompatActivity {
                     }
                 }
 
+                //Draw Base Line
+                mPaintLine.setStrokeWidth(10.0f);
+                float lineWidth = (float) RMS_lineLength * SCALE_INDEX;
+                canvas.drawLine((X_PADDING - 50), (float) (Y_RMS + RECT_HEIGHT), (X_PADDING + lineWidth + 50), (float) (Y_RMS + RECT_HEIGHT), mPaintLine);
 
             } else {
                 //Draw text: "RMS NOT schedulable"
+                float textSize = mPaintText.getTextSize();
+                mPaintText.setTextSize(textSize * 3);
+                canvas.drawText("RMS NOT Schedulable", 0, 19, 400, Y_RMS + 50, mPaintText);
+                mPaintText.setTextSize(textSize);
+                //Draw Base Line
+                mPaintLine.setStrokeWidth(10.0f);
+                canvas.drawLine((X_PADDING - 50), (float) (Y_RMS + RECT_HEIGHT), 1000, (float) (Y_RMS + RECT_HEIGHT), mPaintLine);
+
             }
 
-            //Draw Base Line
-            mPaintLine.setStrokeWidth(10.0f);
-            float lineWidth = (float) RMS_lineLength * SCALE_INDEX;
-            canvas.drawLine((X_PADDING - 50), (float) (Y_RMS + RECT_HEIGHT), (X_PADDING + lineWidth + 50), (float) (Y_RMS + RECT_HEIGHT), mPaintLine);
+
 
         }
 
@@ -232,15 +247,21 @@ public class timeScrollingActivity extends AppCompatActivity {
                     }
                 }
 
+                //Draw Base Line
+                mPaintLine.setStrokeWidth(10.0f);
+                float lineWidth = (float) EDF_lineLength * SCALE_INDEX;
+                canvas.drawLine((X_PADDING - 50), (float) (Y_EDF + RECT_HEIGHT), (X_PADDING + lineWidth + 50), (float) (Y_EDF + RECT_HEIGHT), mPaintLine);
 
             } else {
                 //Draw text: "EDF NOT schedulable"
+                float textSize = mPaintText.getTextSize();
+                mPaintText.setTextSize(textSize * 3);
+                canvas.drawText("EDF NOT Schedulable", 0, 19, 400, Y_EDF + 50, mPaintText);
+                mPaintText.setTextSize(textSize);
+                //Draw Default Base Line
+                mPaintLine.setStrokeWidth(10.0f);
+                canvas.drawLine((X_PADDING - 50), (float) (Y_EDF + RECT_HEIGHT), 1000, (float) (Y_EDF + RECT_HEIGHT), mPaintLine);
             }
-
-            //Draw Base Line
-            mPaintLine.setStrokeWidth(10.0f);
-            float lineWidth = (float) EDF_lineLength * SCALE_INDEX;
-            canvas.drawLine((X_PADDING - 50), (float) (Y_EDF + RECT_HEIGHT), (X_PADDING + lineWidth + 50), (float) (Y_EDF + RECT_HEIGHT), mPaintLine);
 
         }
 
