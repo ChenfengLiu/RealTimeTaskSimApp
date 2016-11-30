@@ -151,32 +151,33 @@ public class ScheduleRMS {
     private void sort(ArrayList<Task> tasks){
         for (int i = 1; i < tasks.size(); i++){
             Task curr = tasks.get(i);
-            for(int j = i - 1; j >= 0; j--){
-                if(curr.getP() > tasks.get(j).getP() && j != i - 1){
-                    Collections.swap(tasks, i, j + 1);
-                    break;
-                }
+            for(int j = i - 1; j >= 0 && curr.getP() < tasks.get(j).getP(); j--){
+                Collections.swap(tasks, j, j+1);
             }
         }
     }
 
     private boolean exactTest(ArrayList<Task> tasks){
-        int[] time = new int[tasks.size()];
+        ArrayList<Integer> time = new ArrayList<>();
+
+        time.add(0);
 
         for (int i = 0; i < tasks.size(); i++){
-            time[0] += tasks.get(i).getC();
+            time.set(0, time.get(0) + tasks.get(i).getC());
         }
-        for (int i = 1; i < tasks.size(); i++){
+        int i = 1;
+        while (true){
+            time.add(0);
             for (int j = 0; j < tasks.size(); j++){
-                time[i] += tasks.get(j).getC() * (int) Math.ceil((double) time[i - 1] / tasks.get(j).getP());
+                time.set(i, time.get(i) + tasks.get(j).getC() * (int) Math.ceil((double) time.get(i - 1) / tasks.get(j).getP()));
             }
-            if (time[i] > tasks.get(tasks.size() - 1).getP()){
+            if (time.get(i) > tasks.get(tasks.size() - 1).getP()){
                 return false;
-            } else if (time[i] == time[i - 1]){
+            } else if (time.get(i) == time.get(i - 1)){
                 return true;
             }
+            i++;
         }
-        return false;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
