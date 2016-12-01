@@ -228,6 +228,14 @@ public class timeScrollingActivity extends AppCompatActivity {
                     mPaintText.setTextSize(textSize * 3);
                     canvas.drawText((RMS_StartTime[i] + ""), 0, (RMS_StartTime[i] + "").length(), RMS_Rects.get(i).left, Y_RMS + RECT_HEIGHT + 50, mPaintText);
                     mPaintText.setTextSize(textSize);
+
+                    //Draw instance Label
+                    textSize = mPaintText.getTextSize();
+                    mPaintText.setTextSize(textSize * 2);
+                    String label = "T"+RMS_Id[i]+","+RMS_Instance[i];
+                    canvas.drawText(label, 0, label.length(), RMS_Rects.get(i).centerX() - 10, Y_RMS - 10, mPaintText);
+                    mPaintText.setTextSize(textSize);
+
                 }
                 //Draw last "time" text
                 for (int j = RMS_Id.length - 1; j > 0; j--) {
@@ -272,6 +280,14 @@ public class timeScrollingActivity extends AppCompatActivity {
                     mPaintText.setTextSize(textSize * 3);
                     canvas.drawText((EDF_StartTime[i] + ""), 0, (EDF_StartTime[i] + "").length(), EDF_Rects.get(i).left, Y_EDF + RECT_HEIGHT + 50, mPaintText);
                     mPaintText.setTextSize(textSize);
+
+                    //Draw instance Label
+                    textSize = mPaintText.getTextSize();
+                    mPaintText.setTextSize(textSize * 2);
+                    String label = "T"+EDF_Id[i]+","+EDF_Instance[i];
+                    canvas.drawText(label, 0, label.length(), EDF_Rects.get(i).centerX() - 10, Y_EDF - 10, mPaintText);
+                    mPaintText.setTextSize(textSize);
+
                 }
                 //Draw last "time" text
                 for (int j = EDF_Id.length - 1; j > 0; j--) {
@@ -313,6 +329,13 @@ public class timeScrollingActivity extends AppCompatActivity {
                     float textSize = mPaintText.getTextSize();
                     mPaintText.setTextSize(textSize * 3);
                     canvas.drawText((LLF_StartTime[i] + ""), 0, (LLF_StartTime[i] + "").length(), LLF_Rects.get(i).left, Y_LLF + RECT_HEIGHT + 50, mPaintText);
+                    mPaintText.setTextSize(textSize);
+
+                    //Draw instance Label
+                    textSize = mPaintText.getTextSize();
+                    mPaintText.setTextSize(textSize * 2);
+                    String label = "T"+LLF_Id[i]+","+LLF_Instance[i];
+                    canvas.drawText(label, 0, label.length(), LLF_Rects.get(i).centerX() - 10, Y_LLF - 10, mPaintText);
                     mPaintText.setTextSize(textSize);
                 }
                 //Draw last "time" text

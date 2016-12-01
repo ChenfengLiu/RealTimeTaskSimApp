@@ -70,7 +70,8 @@ public class ScheduleLLF {
         for (Task t : tasks) {
             int numInstance = simTime / t.getP();
             for (int i = 0; i < numInstance; i++) {
-                Instance mInstance = new Instance(t.getId(), i * t.getP(), t.getC(), (i + 1) * t.getP(), i);
+                Instance mInstance = new Instance(t.getId(), i * t.getP(), t.getC(), (i + 1) *
+                        t.getP(), i);
                 tListProcessed.add(mInstance);
             }
         }
