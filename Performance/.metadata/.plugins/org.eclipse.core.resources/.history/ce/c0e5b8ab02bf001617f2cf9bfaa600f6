@@ -1,0 +1,15 @@
+package analysis;
+
+import java.util.ArrayList;
+
+import 	model.*;
+public class TaskGenerator {
+	private double workload;
+	private int numTasks;
+	private int numSets;
+	
+	private ArrayList<ArrayList<Task>> taskSets;
+	public TaskGenerator(double workload, int numTasks, int numSets ){
+		
+	}
+}

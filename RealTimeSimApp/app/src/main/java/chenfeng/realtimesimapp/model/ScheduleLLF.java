@@ -1,5 +1,8 @@
 package chenfeng.realtimesimapp.model;
 
+import android.nfc.Tag;
+import android.util.Log;
+
 import java.util.ArrayList;
 
 /**
@@ -35,7 +38,7 @@ public class ScheduleLLF {
     //EDF Scheduler helper functions
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void runScheduler(ArrayList<Task> tasks) {
+    private void runScheduler(ArrayList<Task> tasks) {
         if (isSchedulable(tasks)) {
             //create all task instance with different arrive times
             createInstance(tListInput);
@@ -43,7 +46,7 @@ public class ScheduleLLF {
         } else {
             idArr = null;
         }
-        System.out.println("LLF DONE!!!!!!!!");
+
     }
 
     private void simulate(ArrayList<Instance> instances, int sTime) {
@@ -99,7 +102,6 @@ public class ScheduleLLF {
             }
         }
 
-        System.out.println("LLF CurrentInstance is: " + currentInstance + "!!!!!!!!!!!!!!!!!");
         if (currentInstance == -1) {
             currentInstance = target;
         } else if (target == -1) {
@@ -123,7 +125,7 @@ public class ScheduleLLF {
             startTimeArr[currentTime] = currentTime;
             endTimeArr[currentTime] = currentTime + 1;
             instanceArr[currentTime] = tListProcessed.get(index).getInstance();
-
+            Log.i("HAHA"," T" + idArr[currentTime] + ", " + instanceArr[currentTime] + "|");
             tListProcessed.get(index).executeC();
         }
     }

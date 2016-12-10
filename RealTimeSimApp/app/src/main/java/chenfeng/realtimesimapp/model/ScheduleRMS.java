@@ -20,7 +20,6 @@ public class ScheduleRMS {
         tListInput = tasks;
         simTime = simTime(tasks, 0, tasks.size());
 
-        System.out.println("input is: " + tListInput.get(1).getId() + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         idArr = new int[simTime];
         startTimeArr = new int[simTime];
         endTimeArr = new int[simTime];
@@ -36,7 +35,7 @@ public class ScheduleRMS {
     //EDF Scheduler helper functions
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void runScheduler(ArrayList<Task> tasks) {
+    private void runScheduler(ArrayList<Task> tasks) {
         if (isSchedulable(tasks)) {
             //create all task instance with different arrive times
             createInstance(tListInput);
@@ -44,7 +43,6 @@ public class ScheduleRMS {
         } else {
             idArr = null;
         }
-        System.out.println("RMS DONE!!!!!!!!");
     }
 
     private void simulate(ArrayList<Instance> instances, int sTime) {

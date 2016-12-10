@@ -1,0 +1,86 @@
+package analysis;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
+
+import model.*;
+
+public class TaskGenerator {
+
+	private ArrayList<ArrayList<Task>> taskSets;
+	// Average workload of one sample (which contains a set of Task sets)
+	private double workload;
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	// Constructor
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	public TaskGenerator(int numTasks, int numSets, int maxP) {
+
+		taskSets = new ArrayList<ArrayList<Task>>();
+		generateSample(numTasks, numSets, maxP);
+
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	// Generate One Sample & Generator Helper Functions
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	private void generateSample(int numTasks, int numSets, int maxP) {
+		ArrayList<Task> oneSet;
+		Task t;
+		Random ran = new Random();
+		for (int i = 0; i < numSets; i++) {
+			oneSet = new ArrayList<>();
+			for (int j = 0; j < numTasks; j++) {
+				t = new Task(ran.nextInt(maxP - 1) + 1, ran.nextInt(maxP - 2) + 2, j);
+				oneSet.add(t);
+			}
+			// add to sample if schedulable
+			if (isSchedulable(oneSet)) {
+				sort(oneSet);
+				taskSets.add(oneSet);
+			} else {
+				i = i - 1;
+			}
+
+		}
+	}
+
+	private void sort(ArrayList<Task> tasks) {
+		for (int i = 1; i < tasks.size(); i++) {
+			Task curr = tasks.get(i);
+			for (int j = i - 1; j >= 0 && curr.getP() < tasks.get(j).getP(); j--) {
+				Collections.swap(tasks, j, j + 1);
+			}
+		}
+	}
+
+	private Boolean isSchedulable(ArrayList<Task> tasks) {
+		double result = 0;
+		for (int i = 0; i < tasks.size(); i++) {
+			result += (double) tasks.get(i).getC() / tasks.get(i).getP();
+		}
+		if (result <= 1)
+			return true;
+		else
+			return false;
+	}
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	// Workload Helper Function
+	////////////////////////////////////////////////////////////////////////////////////////////////
+
+	private void calWorkload() {
+
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	// Getters
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	public ArrayList<ArrayList<Task>> getTaskSets() {
+		return taskSets;
+	}
+
+	public double getAverageWorkload() {
+		return 0.0;
+	}
+}

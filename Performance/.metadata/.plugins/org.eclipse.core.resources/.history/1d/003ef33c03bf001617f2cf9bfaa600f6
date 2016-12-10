@@ -1,0 +1,45 @@
+package analysis;
+
+import java.util.ArrayList;
+
+import model.*;
+
+public class ExecuteAnalysis {
+
+	// For EDF
+	private static int[] EDF_Id, EDF_StartTime, EDF_EndTime, EDF_Instance;
+
+	// For LLF
+
+	public static void main(String[] args) {
+
+		ArrayList<Task> tList = new ArrayList<>();
+		Task t;
+		// t = new Task(1, 8, 0);
+		// tList.add(t);
+		// t = new Task(2, 6, 1);
+		// tList.add(t);
+		// t = new Task(4, 24, 2);
+		// tList.add(t);
+		t = new Task(3, 12, 0);
+		tList = new ArrayList<>();
+		tList.add(t);
+		t = new Task(3, 12, 1);
+		tList.add(t);
+		t = new Task(8, 16, 2);
+		tList.add(t);
+
+		ScheduleEDF mEDFScheduler = new ScheduleEDF(tList);
+		if (mEDFScheduler.getIdArr() != null) {
+			EDF_Id = mEDFScheduler.getIdArr();
+			EDF_StartTime = mEDFScheduler.getStartTimeArr();
+			EDF_EndTime = mEDFScheduler.getEndTimeArr();
+			EDF_Instance = mEDFScheduler.getInstanceArr();
+		}
+		if(mEDFScheduler.getIdArr() != null){
+			int numPreEmption = mEDFScheduler.calNumPreEmption();
+		}
+
+	}
+
+}

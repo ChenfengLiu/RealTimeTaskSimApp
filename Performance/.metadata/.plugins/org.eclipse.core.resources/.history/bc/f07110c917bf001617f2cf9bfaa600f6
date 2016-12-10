@@ -1,0 +1,40 @@
+package analysis;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
+
+import 	model.*;
+
+public class TaskGenerator {
+	//Average workload of a task set.
+	private double workload;
+	private int numTasks, numSets;
+	
+	private ArrayList<ArrayList<Task>> taskSets;
+	
+	public TaskGenerator(double workload, int numTasks, int numSets ){
+		this.workload = workload;
+		this.numTasks = numTasks;
+		this.numSets = numSets;
+		taskSets = new ArrayList<ArrayList<Task>>();
+	}
+	
+	public ArrayList<ArrayList<Task>> getSample(){
+		ArrayList<Task> oneSet = new ArrayList<>();
+		Random ran = new Random();
+		for(int i = 0; i < numTasks; i++){
+			//TODO: generate one task at a time
+		}
+		return null;
+	}
+	
+	 private void sort(ArrayList<Task> tasks){
+	        for (int i = 1; i < tasks.size(); i++){
+	            Task curr = tasks.get(i);
+	            for(int j = i - 1; j >= 0 && curr.getP() < tasks.get(j).getP(); j--){
+	                Collections.swap(tasks, j, j+1);
+	            }
+	        }
+	    }
+}

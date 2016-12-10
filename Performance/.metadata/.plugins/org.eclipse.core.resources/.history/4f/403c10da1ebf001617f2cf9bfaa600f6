@@ -1,0 +1,50 @@
+package analysis;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+import model.*;
+
+public class ExecuteAnalysis {
+
+	// For EDF
+	private static int[] EDF_preEmptionArr, EDF_workloadArr;
+
+	// For LLF
+	private static int LLF_NumPreEmption;
+
+	public static void main(String[] args) {
+
+		int numTasks = 2;
+		int numSets = 10;
+		int maxP = 10;
+
+		
+
+		ScheduleEDF mEDFScheduler = new ScheduleEDF(tList);
+		if (mEDFScheduler.getIdArr() != null) {
+			EDF_NumPreEmption = mEDFScheduler.calNumPreEmption();
+			System.out.println(EDF_NumPreEmption);
+		}
+
+		ScheduleLLF mLLFScheduler = new ScheduleLLF(tList);
+		if (mLLFScheduler.getIdArr() != null) {
+			LLF_NumPreEmption = mLLFScheduler.calNumPreEmption();
+			System.out.println(LLF_NumPreEmption);
+		}
+
+	}
+	private static void runAnalysisEDF(int numSamples, int numTasks, int numSets, int maxP){
+		EDF_preEmptionArr = new int[numSamples];
+		EDF_workloadArr  = new int[numSamples];
+		for(int i = 0; i < numSamples; i++){
+			TaskGenerator myTaskGenerator = new TaskGenerator(numTasks, numSets, maxP);
+			double averageWorkload = myTaskGenerator.getAverageWorkload();
+			double averagePreEmptionEDF = myTaskGenerator.getAveragePreEmptionEDF();
+			double averagePreEmptionLLF = myTaskGenerator.getAveragePreEmptionLLF();
+			
+		}
+		
+	}
+
+}

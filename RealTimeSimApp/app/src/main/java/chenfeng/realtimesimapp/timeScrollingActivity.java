@@ -86,7 +86,7 @@ public class timeScrollingActivity extends AppCompatActivity {
             LLF_Id = mLLFScheduler.getIdArr();
             LLF_StartTime = mLLFScheduler.getStartTimeArr();
             LLF_EndTime = mLLFScheduler.getEndTimeArr();
-            LLF_Instance = mEDFScheduler.getInstanceArr();
+            LLF_Instance = mLLFScheduler.getInstanceArr();
             LLF_Rects = new ArrayList<>();
             LLF_lineLength = LLF_Id.length;
         }
@@ -153,6 +153,7 @@ public class timeScrollingActivity extends AppCompatActivity {
             EDF_GenerateRectList();
             LLF_GenerateRectList();
 
+
         }
 
         @Override
@@ -183,27 +184,17 @@ public class timeScrollingActivity extends AppCompatActivity {
             d.getSize(dSize);
 
             int width = dSize.x;
-            System.out.println("1: The Width is: " + width + "!!!!!!!!!!!!!!!!!!!!!");
-            System.out.println("RMS LINE LENGTH IS: " + RMS_lineLength + "!!!!!!!!!");
             if (width < RMS_lineLength * SCALE_INDEX + X_PADDING + 150) {
                 width = RMS_lineLength * SCALE_INDEX + X_PADDING + 150;
-                System.out.println("2: The Width is: " + width + "!!!!!!!!!!!!!!!!!!!!!");
             }
 
-            System.out.println("EDF LINE LENGTH IS: " + EDF_lineLength + "!!!!!!!!!");
             if (width < EDF_lineLength * SCALE_INDEX + X_PADDING + 150) {
                 width = EDF_lineLength * SCALE_INDEX + X_PADDING + 150;
-
-                System.out.println("3: The Width is: " + width + "!!!!!!!!!!!!!!!!!!!!!");
             }
 
-            System.out.println("LLF LINE LENGTH IS: " + LLF_lineLength + "!!!!!!!!!");
             if (width < LLF_lineLength * SCALE_INDEX + X_PADDING + 150) {
                 width = LLF_lineLength * SCALE_INDEX + X_PADDING + 150;
-
-                System.out.println("4: The Width is: " + width + "!!!!!!!!!!!!!!!!!!!!!");
             }
-            System.out.println("The Width is: " + width + "!!!!!!!!!!!!!!!!!!!!!");
 
             int height = dSize.y;
             setMeasuredDimension(width, height);
