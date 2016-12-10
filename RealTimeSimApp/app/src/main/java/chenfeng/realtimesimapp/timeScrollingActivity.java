@@ -125,7 +125,6 @@ public class timeScrollingActivity extends AppCompatActivity {
         private ArrayList<Integer> colors;
 
 
-
         //For Canvas
         private int SCALE_INDEX = 100;
         private int RECT_HEIGHT = 100;
@@ -154,7 +153,6 @@ public class timeScrollingActivity extends AppCompatActivity {
             EDF_GenerateRectList();
             LLF_GenerateRectList();
 
-            requestLayout();
         }
 
         @Override
@@ -232,7 +230,7 @@ public class timeScrollingActivity extends AppCompatActivity {
                     //Draw instance Label
                     textSize = mPaintText.getTextSize();
                     mPaintText.setTextSize(textSize * 2);
-                    String label = "T"+RMS_Id[i]+","+RMS_Instance[i];
+                    String label = "T" + RMS_Id[i] + "," + RMS_Instance[i];
                     canvas.drawText(label, 0, label.length(), RMS_Rects.get(i).centerX() - 10, Y_RMS - 10, mPaintText);
                     mPaintText.setTextSize(textSize);
 
@@ -246,6 +244,11 @@ public class timeScrollingActivity extends AppCompatActivity {
                         mPaintText.setTextSize(textSize);
                     }
                 }
+
+                float textSize = mPaintText.getTextSize();
+                mPaintText.setTextSize(textSize * 3);
+                canvas.drawText((RMS_EndTime.length + ""), 0, (RMS_EndTime.length + "").length(), RMS_EndTime.length * 100 + X_PADDING, Y_RMS + RECT_HEIGHT + 50, mPaintText);
+                mPaintText.setTextSize(textSize);
 
                 //Draw Base Line
                 mPaintLine.setStrokeWidth(10.0f);
@@ -284,7 +287,7 @@ public class timeScrollingActivity extends AppCompatActivity {
                     //Draw instance Label
                     textSize = mPaintText.getTextSize();
                     mPaintText.setTextSize(textSize * 2);
-                    String label = "T"+EDF_Id[i]+","+EDF_Instance[i];
+                    String label = "T" + EDF_Id[i] + "," + EDF_Instance[i];
                     canvas.drawText(label, 0, label.length(), EDF_Rects.get(i).centerX() - 10, Y_EDF - 10, mPaintText);
                     mPaintText.setTextSize(textSize);
 
@@ -334,7 +337,7 @@ public class timeScrollingActivity extends AppCompatActivity {
                     //Draw instance Label
                     textSize = mPaintText.getTextSize();
                     mPaintText.setTextSize(textSize * 2);
-                    String label = "T"+LLF_Id[i]+","+LLF_Instance[i];
+                    String label = "T" + LLF_Id[i] + "," + LLF_Instance[i];
                     canvas.drawText(label, 0, label.length(), LLF_Rects.get(i).centerX() - 10, Y_LLF - 10, mPaintText);
                     mPaintText.setTextSize(textSize);
                 }

@@ -98,7 +98,7 @@ public class ScheduleEDF {
                 target = i;
             }
         }
-        System.out.println("CurrentInstance is: " + currentInstance + "!!!!!!!!!!!!!!!!!");
+        System.out.println("EDF CurrentInstance is: " + currentInstance + "!!!!!!!!!!!!!!!!!");
         if (currentInstance == -1) {
             currentInstance = target;
         } else if (target == -1) {

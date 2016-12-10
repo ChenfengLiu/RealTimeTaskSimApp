@@ -11,6 +11,7 @@ public class ScheduleLLF {
     private int simTime;
 
     private ArrayList<Instance> tListProcessed;
+    private int currentInstance = -1;
 
     private int[] idArr, startTimeArr, endTimeArr, instanceArr;
 
@@ -80,10 +81,10 @@ public class ScheduleLLF {
     private ArrayList<Integer> findReadyTasks(int currentTime, ArrayList<Instance> instances) {
         ArrayList<Integer> readyInstanceIndex = new ArrayList<>();
         for (int i = 0; i < instances.size(); i++) {
-            //if arrived, and not finished execution
-            if (instances.get(i).getArriveTime() <= currentTime && instances.get(i).getC() > 0) {
-                readyInstanceIndex.add(i);
-            }
+                //if arrived, and not finished execution
+                if (instances.get(i).getArriveTime() <= currentTime && instances.get(i).getC() > 0) {
+                    readyInstanceIndex.add(i);
+                }
         }
         return readyInstanceIndex;
     }
@@ -92,15 +93,26 @@ public class ScheduleLLF {
         int target = -1;
         int min = Integer.MAX_VALUE;
         for (int i : index) {
-            if ((tListProcessed.get(i).getP() - currentTime) < min) {
-                min = tListProcessed.get(i).getP() - currentTime;
+            if ((tListProcessed.get(i).getP() - tListProcessed.get(i).getC()) < min) {
+                min = tListProcessed.get(i).getP() - tListProcessed.get(i).getC();
                 target = i;
             }
+        }
+
+        System.out.println("LLF CurrentInstance is: " + currentInstance + "!!!!!!!!!!!!!!!!!");
+        if (currentInstance == -1) {
+            currentInstance = target;
+        } else if (target == -1) {
+            return target;
+        } else if (tListProcessed.get(currentInstance).getP() - tListProcessed.get(currentInstance).getC() == tListProcessed.get(target).getP() - tListProcessed.get(target).getC()
+                && tListProcessed.get(currentInstance).getC() > 0) {
+            target = currentInstance;
         }
         return target;
     }
 
     private void runInstance(int currentTime, int index) {
+        currentInstance = index;
         if (index == -1) {
             idArr[currentTime] = -1;
             startTimeArr[currentTime] = -1;
