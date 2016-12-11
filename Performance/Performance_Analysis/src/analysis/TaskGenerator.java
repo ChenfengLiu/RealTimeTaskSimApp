@@ -36,8 +36,14 @@ public class TaskGenerator {
 		for (int i = 0; i < numSets; i++) {
 			oneSet = new ArrayList<>();
 			for (int j = 0; j < numTasks; j++) {
-				t = new Task(ran.nextInt(maxP - 1) + 1, ran.nextInt(maxP - 2) + 2, j);
-				oneSet.add(t);
+				int c = ran.nextInt(maxP - 1) + 1;
+				int p = ran.nextInt(maxP - 2) + 2;
+				if (c < p) {
+					t = new Task(c, p, j);
+					oneSet.add(t);
+				} else {
+					j = j - 1;
+				}
 			}
 			// add to sample if schedulable
 			if (isSchedulable(oneSet)) {
